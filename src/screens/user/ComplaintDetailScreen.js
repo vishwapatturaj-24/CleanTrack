@@ -107,20 +107,35 @@ export default function ComplaintDetailScreen({ route }) {
         {/* Images */}
         {complaint.images && complaint.images.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Photos</Text>
+            <Text style={styles.sectionTitle}>Photos ({complaint.images.length})</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.imageScroll}
             >
-              {complaint.images.map((imageUri, index) => (
-                <Image
-                  key={index}
-                  source={{ uri: imageUri }}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
-              ))}
+              {complaint.images.map((imageUri, index) => {
+                if (!imageUri || imageUri.trim() === '') return null;
+                return (
+                  <View key={index} style={styles.imageWrapper}>
+                    <Image
+                      source={{
+                        uri: imageUri,
+                        cache: 'reload',
+                      }}
+                      style={styles.image}
+                      resizeMode="cover"
+                      defaultSource={require('../../../assets/icon.png')}
+                      onError={(e) => {
+                        console.log('Image load error:', e.nativeEvent.error);
+                        console.log('Failed URL:', imageUri);
+                      }}
+                    />
+                    <View style={styles.imageCountBadge}>
+                      <Text style={styles.imageCountText}>{index + 1}/{complaint.images.length}</Text>
+                    </View>
+                  </View>
+                );
+              })}
             </ScrollView>
           </View>
         )}
@@ -267,12 +282,29 @@ const styles = StyleSheet.create({
   imageScroll: {
     gap: 12,
   },
+  imageWrapper: {
+    position: 'relative',
+  },
   image: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE * 0.75,
     borderRadius: 12,
     backgroundColor: COLORS.lightGrey,
     marginRight: 12,
+  },
+  imageCountBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 20,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  imageCountText: {
+    color: COLORS.white,
+    fontSize: 11,
+    fontWeight: '600',
   },
   mapContainer: {
     height: 180,

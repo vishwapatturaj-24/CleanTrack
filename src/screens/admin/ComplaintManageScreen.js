@@ -213,20 +213,37 @@ const ComplaintManageScreen = ({ route, navigation }) => {
       {/* Images */}
       {complaint.images && complaint.images.length > 0 && (
         <View style={styles.infoCard}>
-          <Text style={styles.cardLabel}>Attached Images</Text>
+          <Text style={styles.cardLabel}>Attached Images ({complaint.images.length})</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.imageScrollContent}
           >
-            {complaint.images.map((imageUri, index) => (
-              <Image
-                key={index}
-                source={{ uri: imageUri }}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            ))}
+            {complaint.images.map((imageUri, index) => {
+              if (!imageUri || imageUri.trim() === '') return null;
+              return (
+                <View key={index} style={styles.imageWrapper}>
+                  <Image
+                    source={{
+                      uri: imageUri,
+                      cache: 'reload',
+                    }}
+                    style={styles.image}
+                    resizeMode="cover"
+                    defaultSource={require('../../../assets/icon.png')}
+                    onLoadStart={() => console.log('Loading image:', imageUri)}
+                    onLoad={() => console.log('Image loaded successfully:', index)}
+                    onError={(e) => {
+                      console.log('Image load error:', e.nativeEvent.error);
+                      console.log('Failed URL:', imageUri);
+                    }}
+                  />
+                  <View style={styles.imageCountBadge}>
+                    <Text style={styles.imageCountText}>{index + 1}/{complaint.images.length}</Text>
+                  </View>
+                </View>
+              );
+            })}
           </ScrollView>
         </View>
       )}
@@ -522,11 +539,28 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingVertical: 4,
   },
+  imageWrapper: {
+    position: 'relative',
+  },
   image: {
-    width: SCREEN_WIDTH * 0.55,
-    height: 180,
+    width: SCREEN_WIDTH * 0.65,
+    height: 220,
     borderRadius: 10,
     backgroundColor: COLORS.lightGrey,
+  },
+  imageCountBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  imageCountText: {
+    color: COLORS.white,
+    fontSize: 11,
+    fontWeight: '600',
   },
   locationRow: {
     flexDirection: 'row',
