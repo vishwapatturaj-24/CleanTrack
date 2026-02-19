@@ -1,17 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../utils/constants';
+import { COLORS, STATUS_COLORS } from '../utils/constants';
 import { getCategoryById } from '../utils/categories';
 import { getTimeAgo, truncateText } from '../utils/helpers';
 import StatusBadge from './StatusBadge';
 
 const ComplaintCard = ({ complaint, onPress }) => {
   const category = getCategoryById(complaint.category);
+  const statusColor = STATUS_COLORS[complaint.status] || COLORS.grey;
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={[styles.card, { borderLeftWidth: 4, borderLeftColor: statusColor }]}
       onPress={onPress}
       activeOpacity={0.7}
     >

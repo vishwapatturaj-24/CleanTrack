@@ -51,6 +51,9 @@ export default function HomeScreen({ navigation }) {
   const pendingCount = complaints.filter(
     (c) => c.status === STATUSES.PENDING
   ).length;
+  const inProgressCount = complaints.filter(
+    (c) => c.status === STATUSES.IN_PROGRESS
+  ).length;
   const resolvedCount = complaints.filter(
     (c) => c.status === STATUSES.RESOLVED
   ).length;
@@ -103,6 +106,11 @@ export default function HomeScreen({ navigation }) {
             <Ionicons name="time" size={24} color={COLORS.warning} />
             <Text style={styles.summaryCount}>{pendingCount}</Text>
             <Text style={styles.summaryLabel}>Pending</Text>
+          </View>
+          <View style={[styles.summaryCard, { backgroundColor: COLORS.info + '15' }]}>
+            <Ionicons name="construct" size={24} color={COLORS.info} />
+            <Text style={styles.summaryCount}>{inProgressCount}</Text>
+            <Text style={styles.summaryLabel}>In Progress</Text>
           </View>
           <View style={[styles.summaryCard, { backgroundColor: COLORS.success + '15' }]}>
             <Ionicons name="checkmark-circle" size={24} color={COLORS.success} />

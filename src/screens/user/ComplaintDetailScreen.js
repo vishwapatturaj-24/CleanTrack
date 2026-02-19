@@ -75,7 +75,8 @@ export default function ComplaintDetailScreen({ route }) {
         <View style={styles.headerSection}>
           <Text style={styles.title}>{complaint.title}</Text>
           <View style={styles.statusRow}>
-            <StatusBadge status={complaint.status} />
+            <Text style={styles.statusLabel}>Status:</Text>
+            <StatusBadge status={complaint.status} size="large" />
           </View>
         </View>
 
@@ -242,6 +243,13 @@ const styles = StyleSheet.create({
   statusRow: {
     marginTop: 12,
     flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  statusLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: COLORS.textSecondary,
   },
   section: {
     backgroundColor: COLORS.white,
